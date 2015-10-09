@@ -1,0 +1,160 @@
+﻿body {
+  margin:0px;
+  background-image:none;
+  position:static;
+  left:auto;
+  width:340px;
+  margin-left:0;
+  margin-right:0;
+  text-align:left;
+}
+#base {
+  position:absolute;
+  z-index:0;
+}
+#u0 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:336px;
+  height:506px;
+}
+#u0_input {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:336px;
+  height:506px;
+}
+#u1 {
+  position:absolute;
+  left:0px;
+  top:490px;
+  width:320px;
+  height:50px;
+}
+#u1_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:320px;
+  height:50px;
+}
+#u2 {
+  position:absolute;
+  left:2px;
+  top:17px;
+  width:316px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#u3 {
+  position:absolute;
+  left:220px;
+  top:502px;
+  width:30px;
+  height:30px;
+}
+#u3_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:30px;
+  height:30px;
+}
+#u4 {
+  position:absolute;
+  left:2px;
+  top:7px;
+  width:26px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#u5 {
+  position:absolute;
+  left:20px;
+  top:504px;
+  width:25px;
+  height:25px;
+}
+#u5_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:25px;
+  height:25px;
+}
+#u6 {
+  position:absolute;
+  left:2px;
+  top:4px;
+  width:21px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#u7 {
+  position:absolute;
+  left:156px;
+  top:504px;
+  width:27px;
+  height:25px;
+}
+#u7_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:27px;
+  height:25px;
+}
+#u8 {
+  position:absolute;
+  left:2px;
+  top:4px;
+  width:23px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#u9 {
+  position:absolute;
+  left:86px;
+  top:506px;
+  width:24px;
+  height:21px;
+}
+#u9_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:24px;
+  height:21px;
+}
+#u10 {
+  position:absolute;
+  left:2px;
+  top:2px;
+  width:20px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#u11 {
+  position:absolute;
+  left:270px;
+  top:514px;
+  width:30px;
+  height:6px;
+}
+#u11_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:30px;
+  height:6px;
+}
+#u12 {
+  position:absolute;
+  left:2px;
+  top:-5px;
+  width:26px;
+  visibility:hidden;
+  word-wrap:break-word;
+}

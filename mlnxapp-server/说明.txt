@@ -1,0 +1,8 @@
+一、HospitalRestService类：
+1.根据医院名称，查找所有医生
+
+二、OfficeRestService类：
+1.根据科室名称，查找所有医生
+
+三、GroupaRestService类：
+1.根据群组名称，查找所有医生
