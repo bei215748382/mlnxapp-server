@@ -52,7 +52,7 @@ public class GenEntityMysql {
 	private boolean f_sql = false; // 是否需要导入包java.sql.*
 
 	// 数据库连接
-	private static final String URL = "jdbc:mysql://localhost:3306/mlnxapp";
+	private static final String URL = "jdbc:mysql://localhost:3306/test";
 	private static final String NAME = "root";
 	private static final String PASS = "123456";
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -64,7 +64,7 @@ public class GenEntityMysql {
 		// 创建连接
 		Connection con;
 		// 查要生成实体类的表
-		String sql = "select table_name from information_schema.tables where table_schema = 'mlnxapp';";
+		String sql = "select table_name from information_schema.tables where table_schema = 'test';";
 
 		PreparedStatement pStemt = null;
 		try {
@@ -83,68 +83,68 @@ public class GenEntityMysql {
 					continue;
 				}
 				tablename = rs.getString("table_name");
-
+System.out.println(tablename);
 				//生成实体类
-//				String sqlTable = "select * from " + tablename;
-//				pStemt = con.prepareStatement(sqlTable);
-//				ResultSetMetaData rsmd = pStemt.getMetaData();
-//				int size = rsmd.getColumnCount(); // 统计列
-//				colnames = new String[size];
-//				colTypes = new String[size];
-//				colSizes = new int[size];
-//				colNulls = new int[size];
-//				for (int i = 0; i < size; i++) {
-//					colnames[i] = rsmd.getColumnName(i + 1);
-//					colTypes[i] = rsmd.getColumnTypeName(i + 1);
-//					colNulls[i] = rsmd.isNullable(i + 1);
-//					if (colTypes[i].equalsIgnoreCase("datetime")) {
-//						f_util = true;
-//					}
-//					if (colTypes[i].equalsIgnoreCase("image")
-//							|| colTypes[i].equalsIgnoreCase("text")) {
-//						f_sql = true;
-//					}
-//					colSizes[i] = rsmd.getColumnDisplaySize(i + 1);
-//				}
-//
-//				String content = parse(colnames, colTypes, colSizes);
-//
-//				try {
-//					File directory = new File("");
-//					// System.out.println("绝对路径："+directory.getAbsolutePath());
-//					// System.out.println("相对路径："+directory.getCanonicalPath());
-//					String path = this.getClass().getResource("").getPath();
-//
-//					System.out.println(path);
-//					System.out.println("src/?/"
-//							+ path.substring(path.lastIndexOf("/com/",
-//									path.length())));
-//					// String outputPath = directory.getAbsolutePath()+
-//					// "/src/"+path.substring(path.lastIndexOf("/com/",
-//					// path.length()), path.length()) + initcap(tablename) +
-//					// ".java";
-//					String outputPath = directory.getAbsolutePath()
-//							+ "/src/main/java/"
-//							+ this.modelPackageOutPath.replace(".", "/") + "/"
-//							+ initcap(tablename) + ".java";
-//					FileWriter fw = new FileWriter(outputPath);
-//					PrintWriter pw = new PrintWriter(fw);
-//					pw.println(content);
-//					pw.flush();
-//					pw.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
+				String sqlTable = "select * from " + tablename;
+				pStemt = con.prepareStatement(sqlTable);
+				ResultSetMetaData rsmd = pStemt.getMetaData();
+				int size = rsmd.getColumnCount(); // 统计列
+				colnames = new String[size];
+				colTypes = new String[size];
+				colSizes = new int[size];
+				colNulls = new int[size];
+				for (int i = 0; i < size; i++) {
+					colnames[i] = rsmd.getColumnName(i + 1);
+					colTypes[i] = rsmd.getColumnTypeName(i + 1);
+					colNulls[i] = rsmd.isNullable(i + 1);
+					if (colTypes[i].equalsIgnoreCase("datetime")) {
+						f_util = true;
+					}
+					if (colTypes[i].equalsIgnoreCase("image")
+							|| colTypes[i].equalsIgnoreCase("text")) {
+						f_sql = true;
+					}
+					colSizes[i] = rsmd.getColumnDisplaySize(i + 1);
+				}
+
+				String content = parse(colnames, colTypes, colSizes);
+
+				try {
+					File directory = new File("");
+					// System.out.println("绝对路径："+directory.getAbsolutePath());
+					// System.out.println("相对路径："+directory.getCanonicalPath());
+					String path = this.getClass().getResource("").getPath();
+
+					System.out.println(path);
+					System.out.println("src/?/"
+							+ path.substring(path.lastIndexOf("/com/",
+									path.length())));
+					// String outputPath = directory.getAbsolutePath()+
+					// "/src/"+path.substring(path.lastIndexOf("/com/",
+					// path.length()), path.length()) + initcap(tablename) +
+					// ".java";
+					String outputPath = directory.getAbsolutePath()
+							+ "/src/main/java/"
+							+ this.modelPackageOutPath.replace(".", "/") + "/"
+							+ initcap(tablename) + ".java";
+					FileWriter fw = new FileWriter(outputPath);
+					PrintWriter pw = new PrintWriter(fw);
+					pw.println(content);
+					pw.flush();
+					pw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				
 				// 生成类名的注册类
 				registration(tablename);
 				
 				
 				//生成Repository类
-//				repository(tablename);
+				repository(tablename);
 				
 				//生成Rest类
-//				rest(tablename);
+				rest(tablename);
 			}
 
 		} catch (SQLException e) {
