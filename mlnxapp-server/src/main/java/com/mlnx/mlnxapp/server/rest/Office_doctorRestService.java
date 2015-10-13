@@ -16,6 +16,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +26,7 @@ import com.mlnx.mlnxapp.server.data.Office_doctorRepository;
 import com.mlnx.mlnxapp.server.service.Office_doctorRegistration;
 /**
 * office_doctor rest类
-* Thu Oct 08 09:13:19 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @Path("/office_doctors")
 @RequestScoped
@@ -73,6 +74,35 @@ public class Office_doctorRestService {
 			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
 		return builder.build();
+	}
+
+	@POST
+	@Path("/delete")
+	public Response delete(int id ){
+
+		Response.ResponseBuilder builder = null;
+		try {
+			registration.delete(id);
+			builder = Response.ok();
+		} catch (Exception e) {
+			Map<String, String> responseObj = new HashMap<String, String>();
+			responseObj.put("error", e.getMessage());
+			builder = Response.ok();
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+		}
+		return builder.build();
+	}
+
+	@GET
+	@Path("/{id:[0-9][0-9]*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Office_doctor findById(@PathParam("id") int id) {
+
+		Office_doctor office_doctor = repository.findById(id);
+		if (office_doctor == null) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return office_doctor;
 	}
 
 	private void validate(Office_doctor office_doctor) throws ConstraintViolationException, ValidationException {

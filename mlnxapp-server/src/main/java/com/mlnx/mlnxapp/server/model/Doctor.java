@@ -1,7 +1,6 @@
 package com.mlnx.mlnxapp.server.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
 * doctor 实体类
-* Wed Sep 30 14:04:34 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Entity
@@ -45,7 +44,7 @@ public class Doctor implements Serializable {
 	private int comment;
 
 	private int commentlist;
-	
+
 	public void setId(int id){
 		this.id=id;
 	}
@@ -133,6 +132,5 @@ public class Doctor implements Serializable {
 	public int getCommentlist(){
 		return commentlist;
 	}
-	
 }
 

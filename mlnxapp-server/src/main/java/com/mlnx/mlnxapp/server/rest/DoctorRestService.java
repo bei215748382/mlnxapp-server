@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
@@ -22,14 +21,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import com.mlnx.mlnxapp.server.model.Doctor;
 import com.mlnx.mlnxapp.server.data.DoctorRepository;
 import com.mlnx.mlnxapp.server.service.DoctorRegistration;
-
 /**
- * doctor rest类 Thu Oct 08 09:13:19 CST 2015 GenEntityMysql工具类生成
- */
+* doctor rest类
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
+*/ 
 @Path("/doctors")
 @RequestScoped
 public class DoctorRestService {
@@ -45,18 +43,6 @@ public class DoctorRestService {
 
 	@Inject
 	private DoctorRegistration registration;
-
-	@GET
-	@Path("/{id:[0-9][0-9]*}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Doctor findById(@PathParam("id") int id) {
-
-		Doctor doctor = repository.findById(id);
-		if (doctor == null) {
-			throw new WebApplicationException(Response.Status.NOT_FOUND);
-		}
-		return doctor;
-	}
 
 	@GET
 	@Path("/all")
@@ -85,31 +71,54 @@ public class DoctorRestService {
 		} catch (Exception e) {
 			Map<String, String> responseObj = new HashMap<String, String>();
 			responseObj.put("error", e.getMessage());
-			builder = Response.status(Response.Status.BAD_REQUEST).entity(
-					responseObj);
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
 		return builder.build();
 	}
 
-	private void validate(Doctor doctor) throws ConstraintViolationException,
-			ValidationException {
+	@POST
+	@Path("/delete")
+	public Response delete(int id ){
 
-		Set<ConstraintViolation<Doctor>> violations = validator
-				.validate(doctor);
+		Response.ResponseBuilder builder = null;
+		try {
+			registration.delete(id);
+			builder = Response.ok();
+		} catch (Exception e) {
+			Map<String, String> responseObj = new HashMap<String, String>();
+			responseObj.put("error", e.getMessage());
+			builder = Response.ok();
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+		}
+		return builder.build();
+	}
+
+	@GET
+	@Path("/{id:[0-9][0-9]*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Doctor findById(@PathParam("id") int id) {
+
+		Doctor doctor = repository.findById(id);
+		if (doctor == null) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return doctor;
+	}
+
+	private void validate(Doctor doctor) throws ConstraintViolationException, ValidationException {
+
+		Set<ConstraintViolation<Doctor>> violations = validator.validate(doctor);
 		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
+			throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
 		}
 	}
 
-	private Response.ResponseBuilder createViolationResponse(
-			Set<ConstraintViolation<?>> violations) {
+	private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
 
 		log.fine("Validation completed. violations found: " + violations.size());
 		Map<String, String> responseObj = new HashMap<String, String>();
 		for (ConstraintViolation<?> violation : violations) {
-			responseObj.put(violation.getPropertyPath().toString(),
-					violation.getMessage());
+			responseObj.put(violation.getPropertyPath().toString(),violation.getMessage());
 		}
 		return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 	}

@@ -1,20 +1,14 @@
 package com.mlnx.mlnxapp.server.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
 * hospital 实体类
-* Wed Sep 30 14:04:34 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Entity
@@ -27,7 +21,7 @@ public class Hospital implements Serializable {
 
 	@NotNull
 	private String name;
-	
+
 	public void setId(int id){
 		this.id=id;
 	}
@@ -43,6 +37,5 @@ public class Hospital implements Serializable {
 	public String getName(){
 		return name;
 	}
-	
 }
 

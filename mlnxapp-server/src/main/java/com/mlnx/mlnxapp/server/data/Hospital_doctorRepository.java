@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.mlnx.mlnxapp.server.model.Hospital_doctor;
 /**
 * hospital_doctor 仓库类
-* Mon Oct 05 17:20:19 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @ApplicationScoped
 public class Hospital_doctorRepository {
@@ -21,7 +21,7 @@ public class Hospital_doctorRepository {
 	@Inject
 	private EntityManager em;
 
-	public Hospital_doctor findById(Long id) {
+	public Hospital_doctor findById(int id) {
 
 		log.info(String.format("Find hospital_doctor for id %d.", id));
 		return em.find(Hospital_doctor.class, id);

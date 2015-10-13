@@ -16,6 +16,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +26,7 @@ import com.mlnx.mlnxapp.server.data.ArticleRepository;
 import com.mlnx.mlnxapp.server.service.ArticleRegistration;
 /**
 * article rest类
-* Sat Oct 10 15:06:05 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
 */ 
 @Path("/articles")
 @RequestScoped
@@ -73,6 +74,35 @@ public class ArticleRestService {
 			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
 		return builder.build();
+	}
+
+	@POST
+	@Path("/delete")
+	public Response delete(int id ){
+
+		Response.ResponseBuilder builder = null;
+		try {
+			registration.delete(id);
+			builder = Response.ok();
+		} catch (Exception e) {
+			Map<String, String> responseObj = new HashMap<String, String>();
+			responseObj.put("error", e.getMessage());
+			builder = Response.ok();
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+		}
+		return builder.build();
+	}
+
+	@GET
+	@Path("/{id:[0-9][0-9]*}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Article findById(@PathParam("id") int id) {
+
+		Article article = repository.findById(id);
+		if (article == null) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
+		return article;
 	}
 
 	private void validate(Article article) throws ConstraintViolationException, ValidationException {

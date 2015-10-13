@@ -12,29 +12,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mlnx.mlnxapp.server.model.Comment;
-import com.mlnx.mlnxapp.server.model.Doctor;
+import com.mlnx.mlnxapp.test.util.HttpUtil;
 
 public class GenEntityMysql {
 
@@ -42,6 +31,7 @@ public class GenEntityMysql {
 	private String servicePackageOutPath = "com.mlnx.mlnxapp.server.service";//指定添加类所在包的路径
 	private String dataPackageOutPath = "com.mlnx.mlnxapp.server.data";//指定仓库类所在包的路径
 	private String restPackageOutPath = "com.mlnx.mlnxapp.server.rest";//指定rest类所在包的路径
+	private String testPackageOutPath = "com.mlnx.mlnxapp.test.rest";//指定rest类所在包的路径
 	private String authorName = "GenEntityMysql工具类生成";// 作者名字
 	private String tablename = "doctor";// 表名
 	private String[] colnames; // 列名数组
@@ -52,7 +42,7 @@ public class GenEntityMysql {
 	private boolean f_sql = false; // 是否需要导入包java.sql.*
 
 	// 数据库连接
-	private static final String URL = "jdbc:mysql://localhost:3306/test";
+	private static final String URL = "jdbc:mysql://localhost:3306/mlnxapp";
 	private static final String NAME = "root";
 	private static final String PASS = "123456";
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -64,14 +54,13 @@ public class GenEntityMysql {
 		// 创建连接
 		Connection con;
 		// 查要生成实体类的表
-		String sql = "select table_name from information_schema.tables where table_schema = 'test';";
+		String sql = "select table_name from information_schema.tables where table_schema = 'mlnxapp';";
 
 		PreparedStatement pStemt = null;
 		try {
 			try {
 				Class.forName(DRIVER);
 			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			con = DriverManager.getConnection(URL, NAME, PASS);
@@ -145,6 +134,9 @@ System.out.println(tablename);
 				
 				//生成Rest类
 				rest(tablename);
+				
+				//生成测试类
+				test(tablename);
 			}
 
 		} catch (SQLException e) {
@@ -153,7 +145,6 @@ System.out.println(tablename);
 			// try {
 			// con.close();
 			// } catch (SQLException e) {
-			// // TODO Auto-generated catch block
 			// e.printStackTrace();
 			// }
 		}
@@ -281,7 +272,7 @@ System.out.println(tablename);
 		sb.append("package " + this.restPackageOutPath + ";\r\n");
 		sb.append("\r\n");
 		//import
-		sb.append("import java.util.HashMap;\r\nimport java.util.HashSet;\r\nimport java.util.List;\r\nimport java.util.Map;\r\nimport java.util.Set;\r\nimport java.util.logging.Logger;\r\nimport javax.enterprise.context.RequestScoped;\r\nimport javax.inject.Inject;\r\nimport javax.validation.ConstraintViolation;\r\nimport javax.validation.ConstraintViolationException;\r\nimport javax.validation.ValidationException;\r\nimport javax.validation.Validator;\r\nimport javax.ws.rs.Consumes;\r\nimport javax.ws.rs.GET;\r\nimport javax.ws.rs.POST;\r\nimport javax.ws.rs.Path;\r\nimport javax.ws.rs.Produces;\r\nimport javax.ws.rs.WebApplicationException;\r\nimport javax.ws.rs.core.MediaType;\r\nimport javax.ws.rs.core.Response;\r\n");
+		sb.append("import java.util.HashMap;\r\nimport java.util.HashSet;\r\nimport java.util.List;\r\nimport java.util.Map;\r\nimport java.util.Set;\r\nimport java.util.logging.Logger;\r\nimport javax.enterprise.context.RequestScoped;\r\nimport javax.inject.Inject;\r\nimport javax.validation.ConstraintViolation;\r\nimport javax.validation.ConstraintViolationException;\r\nimport javax.validation.ValidationException;\r\nimport javax.validation.Validator;\r\nimport javax.ws.rs.Consumes;\r\nimport javax.ws.rs.GET;\r\nimport javax.ws.rs.POST;\r\nimport javax.ws.rs.Path;\r\nimport javax.ws.rs.PathParam;\r\nimport javax.ws.rs.Produces;\r\nimport javax.ws.rs.WebApplicationException;\r\nimport javax.ws.rs.core.MediaType;\r\nimport javax.ws.rs.core.Response;\r\n");
 		//导入实体类
 		sb.append("import "+this.modelPackageOutPath+"."+initcap(tablename)+";\r\n");
 		sb.append("import "+this.dataPackageOutPath+"."+initcap(tablename)+"Repository;\r\n");
@@ -298,7 +289,7 @@ System.out.println(tablename);
 		sb.append("\r\n\t@Inject\r\n\tprivate Validator validator;\r\n");	
 		sb.append("\r\n\t@Inject\r\n\tprivate "+initcap(tablename)+"Repository repository;\r\n");	
 		sb.append("\r\n\t@Inject\r\n\tprivate "+initcap(tablename)+"Registration registration;\r\n");	
-		//方法1
+		//方法1 findAll()
 		sb.append("\r\n\t@GET\r\n\t@Path(\"/all\")\r\n\t@Produces(MediaType.APPLICATION_JSON)\r\n\tpublic List<"+initcap(tablename)+"> findAll() {\r\n");
 		sb.append("\r\n\t\tList<"+initcap(tablename)+"> "+tablename+"s = repository.findAll();\r\n");
 		sb.append("\t\tif ("+tablename+"s == null || "+tablename+"s.size() == 0) {\r\n");
@@ -306,7 +297,7 @@ System.out.println(tablename);
 		sb.append("\t\t}\r\n");
 		sb.append("\t\treturn "+tablename+"s;\r\n");
 		sb.append("\t}\r\n");		
-		//方法2
+		//方法2 create()
 		sb.append("\r\n\t@POST\r\n\t@Consumes(MediaType.APPLICATION_JSON)\r\n\t@Produces(MediaType.APPLICATION_JSON)\r\n\tpublic Response create("+initcap(tablename)+" "+tablename+") {\r\n");
 		sb.append("\r\n\t\tResponse.ResponseBuilder builder = null;\r\n");
 		sb.append("\t\ttry {\r\n");
@@ -322,14 +313,36 @@ System.out.println(tablename);
 		sb.append("\t\t}\r\n");
 		sb.append("\t\treturn builder.build();\r\n");
 		sb.append("\t}\r\n");
-		//方法3
+		//方法3 delete
+		sb.append("\r\n\t@POST\r\n\t@Path(\"/delete\")\r\n\tpublic Response delete(int id ){\r\n");
+		sb.append("\r\n\t\tResponse.ResponseBuilder builder = null;\r\n");
+		sb.append("\t\ttry {\r\n");
+		sb.append("\t\t\tregistration.delete(id);\r\n");
+		sb.append("\t\t\tbuilder = Response.ok();\r\n");
+		sb.append("\t\t} catch (Exception e) {\r\n");
+		sb.append("\t\t\tMap<String, String> responseObj = new HashMap<String, String>();\r\n");
+		sb.append("\t\t\tresponseObj.put(\"error\", e.getMessage());\r\n");
+		sb.append("\t\t\tbuilder = Response.ok();\r\n");
+		sb.append("\t\t\tbuilder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);\r\n");
+		sb.append("\t\t}\r\n");
+		sb.append("\t\treturn builder.build();\r\n");
+		sb.append("\t}\r\n");
+		//方法4 findById() ---未完待续
+		sb.append("\r\n\t@GET\r\n\t@Path(\"/{id:[0-9][0-9]*}\")\r\n\t@Produces(MediaType.APPLICATION_JSON)\r\n\tpublic "+initcap(tablename)+" findById(@PathParam(\"id\") int id) {\r\n");
+		sb.append("\r\n\t\t"+initcap(tablename)+" "+tablename+" = repository.findById(id);\r\n");
+		sb.append("\t\tif ("+tablename+" == null) {\r\n");
+		sb.append("\t\t\tthrow new WebApplicationException(Response.Status.NOT_FOUND);\r\n");
+		sb.append("\t\t}\r\n");
+		sb.append("\t\treturn "+tablename+";\r\n");
+		sb.append("\t}\r\n");
+		//方法5 validate
 		sb.append("\r\n\tprivate void validate("+initcap(tablename)+" "+tablename+") throws ConstraintViolationException, ValidationException {\r\n");
 		sb.append("\r\n\t\tSet<ConstraintViolation<"+initcap(tablename)+">> violations = validator.validate("+tablename+");\r\n");
 		sb.append("\t\tif (!violations.isEmpty()) {\r\n");
 		sb.append("\t\t\tthrow new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));\r\n");
 		sb.append("\t\t}\r\n");
 		sb.append("\t}\r\n");
-		//方法4
+		//方法6 createViolationResponse()
 		sb.append("\r\n\tprivate Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {\r\n");
 		sb.append("\r\n\t\tlog.fine(\"Validation completed. violations found: \" + violations.size());\r\n");
 		sb.append("\t\tMap<String, String> responseObj = new HashMap<String, String>();\r\n");
@@ -349,6 +362,81 @@ System.out.println(tablename);
 					+ "/src/main/java/"
 					+ this.restPackageOutPath.replace(".", "/") + "/"
 					+ initcap(tablename)+"RestService" + ".java";
+			FileWriter fw = new FileWriter(outputPath);
+			PrintWriter pw = new PrintWriter(fw);
+			pw.println(sb.toString());
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 功能：生成test里面通用的代码
+	 * 
+	 * @param tablename
+	 */
+	private void test(String tablename){
+		StringBuffer sb = new StringBuffer();
+		sb.append("package " + this.testPackageOutPath + ";\r\n");
+		sb.append("\r\n");
+		//import
+		sb.append("import com.alibaba.fastjson.JSONObject;\r\nimport com.mlnx.mlnxapp.test.util.HttpUtil;\r\n");
+		// 注释部分
+		sb.append("/**\r\n");
+		sb.append("* " + tablename + " test类\r\n");
+		sb.append("* " + new Date() + " " + this.authorName + "\r\n");
+		sb.append("*/ \r\n");
+		// 实体部分
+		sb.append("public class "
+				+ initcap(tablename)+"Test" + " {\r\n");
+		//方法1 regist()
+		sb.append("\r\n\tprivate static void regist() {\r\n");
+		sb.append("\r\n\t\tJSONObject obj = new JSONObject();\r\n");
+		sb.append("\t\tobj.put(\"key\", \"value\");\r\n");
+		sb.append("\t\tString sr = HttpUtil.sendPost(\r\n");
+		sb.append("\t\t\t\t\"http://localhost:8080/mlnxapp-server/rest/"+tablename+"s\",\r\n");
+		sb.append("\t\t\t\tobj.toJSONString());\r\n");
+		sb.append("\t\tSystem.out.println(sr);\r\n");
+		sb.append("\t}\r\n");		
+		//方法2 findAll()
+		sb.append("\r\n\tprivate static void findAll() {\r\n");
+		sb.append("\r\n\t\tString sr = HttpUtil\r\n");
+		sb.append("\t\t\t\t.sendGet(\"http://localhost:8080/mlnxapp-server/rest/"+tablename+"s/all\");\r\n");
+		sb.append("\t\tSystem.out.println(sr);\r\n");
+		sb.append("\t}\r\n");	
+		//方法3 delete()
+		sb.append("\r\n\tprivate static void delete() {\r\n");
+		sb.append("\r\n\t\tString sr = HttpUtil.sendPost(\r\n");
+		sb.append("\t\t\t\t\"http://localhost:8080/mlnxapp-server/rest/"+tablename+"s/delete\",\r\n");
+		sb.append("\t\t\t\t\"{id}\");\r\n");
+		sb.append("\t\tSystem.out.println(sr);\r\n");
+		sb.append("\t}\r\n");	
+		//方法4 findById() 
+		sb.append("\r\n\tprivate static void findById() {\r\n");
+		sb.append("\r\n\t\tString sr = HttpUtil\r\n");
+		sb.append("\t\t\t\t.sendGet(\"http://localhost:8080/mlnxapp-server/rest/"+tablename+"s/{id}\");\r\n");
+		sb.append("\t\tSystem.out.println(sr);\r\n");
+		sb.append("\t}\r\n");
+		//方法5 main()
+		sb.append("\r\n\tpublic static void main(String[] args) {\r\n");
+		sb.append("\r\n\t\tregist();\r\n");
+		sb.append("\t\tfindAll();\r\n");
+		sb.append("\t\tdelete();\r\n");
+		sb.append("\t\tfindById();\r\n");
+		sb.append("\t}\r\n");
+		//方法结束
+		sb.append("}");
+		
+		
+
+		try {
+			File directory = new File("");
+			String outputPath = directory.getAbsolutePath()
+					+ "/src/test/java/"
+					+ this.testPackageOutPath.replace(".", "/") + "/"
+					+ initcap(tablename)+"Test" + ".java";
 			FileWriter fw = new FileWriter(outputPath);
 			PrintWriter pw = new PrintWriter(fw);
 			pw.println(sb.toString());
@@ -496,7 +584,7 @@ System.out.println(tablename);
 	}
 
 	/**
-	 * 出口 TODO
+	 * 出口 
 	 * 
 	 * @param args
 	 */

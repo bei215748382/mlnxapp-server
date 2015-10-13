@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
 * hospital_doctor 实体类
-* Wed Sep 30 14:04:34 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Entity
@@ -33,8 +33,8 @@ public class Hospital_doctor implements Serializable {
 		return id;
 	}
 
-	public void setHospital_id(int hostpital_id){
-		this.hospital_id=hostpital_id;
+	public void setHospital_id(int hospital_id){
+		this.hospital_id=hospital_id;
 	}
 
 	public int getHospital_id(){

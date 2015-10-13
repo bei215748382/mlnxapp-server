@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.mlnx.mlnxapp.server.model.User;
 /**
 * user 仓库类
-* Mon Oct 05 17:20:19 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @ApplicationScoped
 public class UserRepository {
@@ -21,7 +21,7 @@ public class UserRepository {
 	@Inject
 	private EntityManager em;
 
-	public User findById(Long id) {
+	public User findById(int id) {
 
 		log.info(String.format("Find user for id %d.", id));
 		return em.find(User.class, id);

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
 * article 实体类
-* Sat Oct 10 15:06:05 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Entity

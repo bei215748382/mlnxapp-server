@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 import com.mlnx.mlnxapp.server.model.Office_doctor;
 /**
 * office_doctor 服务类
-* Fri Oct 09 15:18:37 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Stateless

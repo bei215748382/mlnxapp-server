@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.mlnx.mlnxapp.server.model.Office_doctor;
 /**
 * office_doctor 仓库类
-* Mon Oct 05 17:20:19 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:44 CST 2015 GenEntityMysql工具类生成
 */ 
 @ApplicationScoped
 public class Office_doctorRepository {
@@ -21,7 +21,7 @@ public class Office_doctorRepository {
 	@Inject
 	private EntityManager em;
 
-	public Office_doctor findById(Long id) {
+	public Office_doctor findById(int id) {
 
 		log.info(String.format("Find office_doctor for id %d.", id));
 		return em.find(Office_doctor.class, id);

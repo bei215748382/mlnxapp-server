@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.mlnx.mlnxapp.server.model.Doctor_groupa;
 /**
 * doctor_groupa 仓库类
-* Mon Oct 05 17:20:19 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
 */ 
 @ApplicationScoped
 public class Doctor_groupaRepository {
@@ -21,7 +21,7 @@ public class Doctor_groupaRepository {
 	@Inject
 	private EntityManager em;
 
-	public Doctor_groupa findById(Long id) {
+	public Doctor_groupa findById(int id) {
 
 		log.info(String.format("Find doctor_groupa for id %d.", id));
 		return em.find(Doctor_groupa.class, id);

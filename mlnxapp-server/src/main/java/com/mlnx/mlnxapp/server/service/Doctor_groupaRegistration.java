@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 import com.mlnx.mlnxapp.server.model.Doctor_groupa;
 /**
 * doctor_groupa 服务类
-* Wed Sep 30 14:35:32 CST 2015 GenEntityMysql工具类生成
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
 */ 
 @SuppressWarnings("serial")
 @Stateless
@@ -28,12 +28,19 @@ public class Doctor_groupaRegistration implements Serializable {
 	public Response register(Doctor_groupa doctor_groupa) throws Exception {
 
 		Response.ResponseBuilder builder = Response.ok();
-		log.info("Registering "+ doctor_groupa.getId());
+		log.info("Registering doctor_groupa for id:"+ doctor_groupa.getId());
 		em.persist(doctor_groupa);
 		doctor_groupaEventSrc.fire(doctor_groupa);
 		return builder.build();
 	}
-	
-	
+
+	public Response delete(int id) throws Exception {
+
+		Response.ResponseBuilder builder = Response.ok();
+		log.info("Delete doctor_groupa for id: "+ id);
+		Doctor_groupa doctor_groupa = em.find(Doctor_groupa.class,id);
+		em.remove(doctor_groupa);
+		return builder.build();
+	}
 }
 

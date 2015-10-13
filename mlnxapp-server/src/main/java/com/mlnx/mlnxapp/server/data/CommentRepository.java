@@ -2,21 +2,16 @@ package com.mlnx.mlnxapp.server.data;
 
 import java.util.List;
 import java.util.logging.Logger;
-
-import javax.ejb.TransactionAttribute;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-
 import com.mlnx.mlnxapp.server.model.Comment;
-import com.mlnx.mlnxapp.server.model.Groupa;
-
 /**
- * comment 仓库类 Mon Oct 05 17:20:19 CST 2015 GenEntityMysql工具类生成
- */
+* comment 仓库类
+* Tue Oct 13 09:56:43 CST 2015 GenEntityMysql工具类生成
+*/ 
 @ApplicationScoped
 public class CommentRepository {
 
@@ -40,5 +35,5 @@ public class CommentRepository {
 		log.info("Find all comments.");
 		return em.createQuery(criteria).getResultList();
 	}
-	
 }
+
