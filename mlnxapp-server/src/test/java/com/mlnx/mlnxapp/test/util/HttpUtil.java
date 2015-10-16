@@ -7,51 +7,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
-
 public class HttpUtil {
-
-	/**
-	 * 添加评论
-	 */
-	private static void regist() {
-		// 发送 用戶註冊，200 OK 409手機號已存在
-		JSONObject obj = new JSONObject();
-		obj.put("title", "文章一");
-		obj.put("body", "文章的内容巴拉巴拉巴拉");
-		obj.put("author", "abm");// 准时度评分
-		obj.put("time", new Date());
-		obj.put("type", "社区");
-		obj.put("praise", 0);
-		obj.put("collect", 0);
-		obj.put("comment", 0);
-		System.out.println(obj.toJSONString());
-		String sr = HttpUtil.sendPost(
-				"http://localhost:8080/mlnxapp-server/rest/articles",
-				obj.toJSONString());// http://localhost:8080/mlnxapp-server/rest/doctors
-		System.out.println(sr);
-	}
-
-	/**
-	 * 查找所有评论
-	 */
-	private static void findAll() {
-		String sr = HttpUtil
-				.sendGet("http://localhost:8080/mlnxapp-server/rest/articles/all");
-		System.out.println(sr);
-	}
-
-	private static void delete() {
-		String sr = HttpUtil.sendPost(
-				"http://localhost:8080/mlnxapp-server/rest/articles/delete",
-				"52");
-		System.out.println(sr);
-	}
 
 	/**
 	 * 向指定URL发送GET方法的请求
@@ -168,11 +127,6 @@ public class HttpUtil {
 			}
 		}
 		return result;
-	}
-
-	public static void main(String[] args) {
-//		regist();
-//		findAll();
 	}
 
 }
